@@ -1,4 +1,4 @@
-13:56:49 **** Clean-only build of configuration Debug for project Task_Scheduler ****
+20:11:13 **** Clean-only build of configuration Debug for project Task_Scheduler ****
 make -j8 clean 
 rm -rf *
  

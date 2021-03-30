@@ -22,9 +22,9 @@
 #include "main.h"
 #include "led.h"
 
-uint8_t volatile current_task = 1; // task1 is running
-uint32_t volatile global_tick_count = 0;
-TCB_t volatile user_tasks[MAX_USER_TASKS];
+uint8_t current_task = 1; // task1 is running
+uint32_t global_tick_count = 0;
+TCB_t user_tasks[MAX_USER_TASKS];
 
 void init_systick_timer(uint32_t tick_hz)
 {
@@ -81,27 +81,27 @@ void task1_handler(void)
 {
 	while(1){
 		led_on(LED_GREEN);
-		task_delay(1000);
+		delay(DELAY_1S);
 		led_off(LED_GREEN);
-		task_delay(1000);
+		delay(DELAY_1S);
 	}
 }
 void task2_handler(void)
 {
 	while(1){
 		led_on(LED_ORANGE);
-		task_delay(500);
+		delay(DELAY_500MS);
 		led_off(LED_ORANGE);
-		task_delay(500);
+		delay(DELAY_500MS);
 	}
 }
 void task3_handler(void)
 {
 	while(1){
 		led_on(LED_RED);
-		task_delay(250);
+		delay(DELAY_250MS);
 		led_off(LED_RED);
-		task_delay(250);
+		delay(DELAY_250MS);
 	}
 }
 void task4_handler(void)
@@ -109,9 +109,9 @@ void task4_handler(void)
 
 	while(1){
 		led_on(LED_BLUE);
-		task_delay(125);
+		delay(DELAY_125MS);
 		led_off(LED_BLUE);
-		task_delay(125);
+		delay(DELAY_125MS);
 	}
 }
 
@@ -185,13 +185,13 @@ void decide_next_task(void)
 	{
 		current_task++;
 		current_task %= MAX_USER_TASKS;
-		state = user_tasks[current_task].current_state;
-		if( (state == TASK_READY_STATE) && (current_task != 0))
+		state = user_tasks[i].current_state;
+		if( (state == TASK_READY_STATE) && (current_state != 0))
 			break;
 	}
 
 	if(state != TASK_READY_STATE)
-		current_task = 0;
+		current_state = 0;
 }
 
 __attribute__((naked)) void switch_sp_to_psp(void)
@@ -233,27 +233,20 @@ void HardFault_Handler(void)
 	while(1);
 }
 
-
 void task_delay(uint32_t tick_count)
 {
-	// Disable Interrups --> For shared global variable protection
-	INTERRUPT_DISABLE();
-
 	if(current_task) // if the current task isn't the idle task
 	{
 		user_tasks[current_task].block_count = global_tick_count + tick_count;
 		user_tasks[current_task].current_state = TASK_BLOCKED_STATE;
 		schedule();
 	}
-
-	// Enable Interrups
-	INTERRUPT_ENABLE();
 }
 
 void schedule(void)
 {
 	//Pend the PendSV Exception
-	uint32_t volatile *pICSR = (uint32_t *)0xE000ED04;
+	uint32_t *pICSR = (uint32_t *)0xE000ED04;
 	*pICSR |= (1 << 28);
 }
 
@@ -276,9 +269,9 @@ void unblock_user_tasks(void)
 	}
 }
 
-void SysTick_Handler(void)
+__attribute__((naked)) void SysTick_Handler(void)
 {
-	uint32_t volatile *pICSR = (uint32_t *)0xE000ED04;
+	uint32_t *pICSR = (uint32_t *)0xE000ED04;
 
 	update_global_tick_count();
 	unblock_user_tasks();

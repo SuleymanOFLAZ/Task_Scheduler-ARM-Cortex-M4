@@ -31,18 +31,13 @@
 /* --- */
 
 #define MAX_USER_TASKS 	   5
-#define TASK_READY_STATE   0x00U
-#define TASK_BLOCKED_STATE 0xFFU
-
-#define INTERRUPT_DISABLE() __asm volatile("MOV R0, #0x1"); \
-		__asm("MSR PRIMASK, R0")
-#define INTERRUPT_ENABLE() __asm volatile("MOV R0, #0x0"); \
-		__asm("MSR PRIMASK, R0")
+#define TASK_READY_STATE   0x00U;
+#define TASK_BLOCKED_STATE 0xFFU;
 
 typedef struct
 {
 	uint32_t psp_value;
-	uint32_t block_count;
+	uint32_t block_caunt;
 	uint8_t  current_state;
 	void (*task_handler)(void);
 }TCB_t;
@@ -53,11 +48,6 @@ void task1_handler(void); // This is Task1
 void task2_handler(void); // This is Task2
 void task3_handler(void); // This is Task3
 void task4_handler(void); // This is Task4 of the application
-
-void unblock_user_tasks(void);
-void update_global_tick_count(void);
-void schedule(void);
-void task_delay(uint32_t tick_count);
 
 __attribute__((naked)) void init_scheduler_task_stack(uint32_t sched_task_stack_start);
 void init_user_tasks_stack(void);

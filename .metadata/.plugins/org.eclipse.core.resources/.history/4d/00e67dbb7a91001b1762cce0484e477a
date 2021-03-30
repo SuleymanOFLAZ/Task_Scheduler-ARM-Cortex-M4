@@ -236,7 +236,7 @@ void HardFault_Handler(void)
 
 void task_delay(uint32_t tick_count)
 {
-	// Disable Interrups --> For shared global variable protection
+	// Disable Interrups
 	INTERRUPT_DISABLE();
 
 	if(current_task) // if the current task isn't the idle task

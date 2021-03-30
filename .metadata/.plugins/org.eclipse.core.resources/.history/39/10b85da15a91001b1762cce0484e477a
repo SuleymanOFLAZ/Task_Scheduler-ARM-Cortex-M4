@@ -30,14 +30,9 @@
 #define SYSTICK_TIMER_CLOCK_SPEED PROCESSOR_CLOCK_SPEED
 /* --- */
 
-#define MAX_USER_TASKS 	   5
-#define TASK_READY_STATE   0x00U
-#define TASK_BLOCKED_STATE 0xFFU
-
-#define INTERRUPT_DISABLE() __asm volatile("MOV R0, #0x1"); \
-		__asm("MSR PRIMASK, R0")
-#define INTERRUPT_ENABLE() __asm volatile("MOV R0, #0x0"); \
-		__asm("MSR PRIMASK, R0")
+#define MAX_USER_TASKS 	   5;
+#define TASK_READY_STATE   0x00U;
+#define TASK_BLOCKED_STATE 0xFFU;
 
 typedef struct
 {

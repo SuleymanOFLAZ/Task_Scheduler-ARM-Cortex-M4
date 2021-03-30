@@ -34,10 +34,8 @@
 #define TASK_READY_STATE   0x00U
 #define TASK_BLOCKED_STATE 0xFFU
 
-#define INTERRUPT_DISABLE() __asm volatile("MOV R0, #0x1"); \
-		__asm("MSR PRIMASK, R0")
-#define INTERRUPT_ENABLE() __asm volatile("MOV R0, #0x0"); \
-		__asm("MSR PRIMASK, R0")
+#define INTERRUPT_DISABLE() __asm volatile("MOV R0, #0x1"); __asm("MSR PRIMASK, R0")
+#define INTERRUPT_ENABLE() __asm volatile("MOV R0, #0x0"); __asm("MSR PRIMASK, R0")
 
 typedef struct
 {
