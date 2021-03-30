@@ -1,0 +1,7 @@
+13:56:49 **** Clean-only build of configuration Debug for project Task_Scheduler ****
+make -j8 clean 
+rm -rf *
+ 
+
+13:56:49 Build Finished. 0 errors, 0 warnings. (took 411ms)
+
