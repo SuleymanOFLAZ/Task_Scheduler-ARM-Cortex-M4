@@ -29,4 +29,6 @@ Eighthly, idle function actually do nothing and it implemented for the times tha
 
 Ninethly, We need a alghoritm to decide next task. We implemented Round Robin Methode that mean actualy cahenges the tasks in order. We have a basic alghorithm in this code. Even so, having a look to it can be helpful. It can become little confusing because of the idle task.
 
+Lastly, We must be careful about variables that shared between Thread Mode code and Handler Mode code because of "race conditions". We have a sample of variable like this in task_delay function. Not a good solution but we used that method for this simple application: Disable all interrupt before reaching the shared global data, and enable the interrupts after using it.
+
 This code was written on STM32CubeIDE for STM32F407G-DISC1 board, compiled with GCC arm compiler, and tested.
